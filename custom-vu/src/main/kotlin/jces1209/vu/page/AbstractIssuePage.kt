@@ -6,4 +6,5 @@ interface AbstractIssuePage {
     fun comment(): Commenting
     fun editDescription(description: String): AbstractIssuePage
     fun linkIssue(): IssueLinking
+    fun changeAssignee(): AbstractIssuePage
 }

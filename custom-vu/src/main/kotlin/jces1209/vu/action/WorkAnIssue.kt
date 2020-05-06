@@ -24,7 +24,8 @@ class WorkAnIssue(
     private val random: SeededRandom,
     private val editProbability: Float,
     private val commentProbability: Float,
-    private val linkIssueProbability: Float
+    private val linkIssueProbability: Float,
+    private val changeAssigneeProbability: Float
 ) : Action {
     private val logger: Logger = LogManager.getLogger(this::class.java)
 
@@ -44,6 +45,9 @@ class WorkAnIssue(
         }
         if (random.random.nextFloat() < commentProbability) {
             comment(loadedIssuePage)
+        }
+        if (random.random.nextFloat() < changeAssigneeProbability) {
+            changeAssignee(loadedIssuePage)
         }
     }
 
@@ -89,6 +93,12 @@ class WorkAnIssue(
                 commenting.saveComment()
                 commenting.waitForTheNewComment()
             }
+        }
+    }
+
+    private fun changeAssignee(issuePage: AbstractIssuePage) {
+        meter.measure(ActionType("Change Assignee") { Unit }) {
+            issuePage.changeAssignee()
         }
     }
 }
