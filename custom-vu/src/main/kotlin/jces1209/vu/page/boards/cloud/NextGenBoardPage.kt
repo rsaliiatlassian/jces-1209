@@ -1,6 +1,8 @@
-package jces1209.vu.page.boards
+package jces1209.vu.page.boards.cloud
 
 import jces1209.vu.page.FalliblePage
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
@@ -10,6 +12,7 @@ class NextGenBoardPage(
     private val driver: WebDriver,
     override val uri: URI
 ) : BoardPage {
+    private val logger: Logger = LogManager.getLogger(this::class.java)
 
     private val falliblePage = FalliblePage.Builder(
         webDriver = driver,
@@ -30,6 +33,16 @@ class NextGenBoardPage(
 
         val issueCards = findIssueCards()
         return NextGenBoardContent(issueCards)
+    }
+
+    override fun areThereIssues(): Boolean {
+        logger.debug("Issue detector is not implemented")
+        return false;
+    }
+
+    override fun issueBentoView(): BoardPage {
+        logger.debug("Issue bento view is not implemented")
+        return this;
     }
 
     private fun findIssueCards(): List<WebElement> {

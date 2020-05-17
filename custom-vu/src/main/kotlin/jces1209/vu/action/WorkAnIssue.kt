@@ -4,6 +4,11 @@ import com.atlassian.performance.tools.jiraactions.api.*
 import com.atlassian.performance.tools.jiraactions.api.action.Action
 import com.atlassian.performance.tools.jiraactions.api.measure.ActionMeter
 import com.atlassian.performance.tools.jiraactions.api.memories.IssueKeyMemory
+import jces1209.vu.MeasureType.Companion.ISSUE_EDIT_DESCRIPTION
+import jces1209.vu.MeasureType.Companion.ISSUE_LINK
+import jces1209.vu.MeasureType.Companion.ISSUE_LINK_LOAD_FORM
+import jces1209.vu.MeasureType.Companion.ISSUE_LINK_SEARCH_CHOOSE
+import jces1209.vu.MeasureType.Companion.ISSUE_LINK_SUBMIT
 import jces1209.vu.page.AbstractIssuePage
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
@@ -50,7 +55,7 @@ class WorkAnIssue(
     }
 
     private fun edit(issuePage: AbstractIssuePage) {
-        meter.measure(ActionType("Edit Issue Description") { Unit }) {
+        meter.measure(ISSUE_EDIT_DESCRIPTION) {
             issuePage.editDescription("updated")
         }
         logger.debug("I want to edit the $issuePage")
@@ -58,14 +63,14 @@ class WorkAnIssue(
 
     private fun linkIssue(issuePage: AbstractIssuePage, issuePrefixSearch: String) {
         val issueLinking = issuePage.linkIssue()
-        meter.measure(ActionType("Link Issue") { Unit }) {
-            meter.measure(ActionType("Link Issue(Load form)") { Unit }) {
+        meter.measure(ISSUE_LINK) {
+            meter.measure(ISSUE_LINK_LOAD_FORM) {
                 issueLinking.openEditor()
             }
-            meter.measure(ActionType("Link Issue(Search issue and choose)") { Unit }) {
+            meter.measure(ISSUE_LINK_SEARCH_CHOOSE) {
                 issueLinking.searchAndChooseIssue(issuePrefixSearch)
             }
-            meter.measure(ActionType("Link Issue(Submit)") { Unit }) {
+            meter.measure(ISSUE_LINK_SUBMIT) {
                 issueLinking.submitIssue()
             }
         }

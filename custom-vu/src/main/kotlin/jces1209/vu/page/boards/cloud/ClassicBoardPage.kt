@@ -1,14 +1,20 @@
-package jces1209.vu.page.boards
+package jces1209.vu.page.boards.cloud
 
 import jces1209.vu.page.FalliblePage
+import jces1209.vu.wait
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
+import org.openqa.selenium.support.ui.ExpectedConditions
+import org.openqa.selenium.support.ui.ExpectedConditions.and
+import org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated
 import java.net.URI
 
 internal class ClassicBoardPage(
     private val driver: WebDriver,
     override val uri: URI
 ) : BoardPage {
+
+    private val issueSelector = By.className("ghx-issue")
 
     private val falliblePage = FalliblePage.Builder(
         webDriver = driver,
@@ -25,6 +31,28 @@ internal class ClassicBoardPage(
     override fun waitForBoardPageToLoad(): BoardContent {
         falliblePage.waitForPageToLoad()
         return KanbanBoardContent(driver)
+    }
+
+    override fun areThereIssues(): Boolean {
+        driver
+            .wait(visibilityOfElementLocated(By.className("ghx-column")))
+
+        return !driver.findElements(issueSelector).isEmpty()
+    }
+
+    override fun issueBentoView(): BoardPage {
+        driver
+            .wait(visibilityOfElementLocated(issueSelector))
+            .click()
+
+        driver
+            .wait(
+                and(
+                    visibilityOfElementLocated(By.cssSelector("[role='dialog']")),
+                    visibilityOfElementLocated(By.cssSelector("[data-test-id='issue-activity-feed.heading']"))
+                ))
+
+        return this;
     }
 
     private class KanbanBoardContent(

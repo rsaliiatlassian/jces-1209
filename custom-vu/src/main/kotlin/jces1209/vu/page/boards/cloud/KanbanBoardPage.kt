@@ -1,9 +1,10 @@
-package jces1209.vu.page.boards
+package jces1209.vu.page.boards.cloud
 
 import org.openqa.selenium.WebDriver
 import java.net.URI
 
-class ScrumBoardPage(
+class KanbanBoardPage(
     private val driver: WebDriver,
     override val uri: URI
-) : BoardPage by ClassicBoardPage(driver, uri)
+) : BoardPage by ClassicBoardPage(driver, uri) {
+}

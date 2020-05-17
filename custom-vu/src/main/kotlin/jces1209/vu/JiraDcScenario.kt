@@ -8,13 +8,13 @@ import com.atlassian.performance.tools.jiraactions.api.measure.ActionMeter
 import com.atlassian.performance.tools.jiraactions.api.memories.UserMemory
 import com.atlassian.performance.tools.jiraactions.api.scenario.JiraCoreScenario
 import com.atlassian.performance.tools.jiraactions.api.scenario.Scenario
-import com.atlassian.performance.tools.jirasoftwareactions.api.WebJiraSoftware
 import com.atlassian.performance.tools.jirasoftwareactions.api.actions.BrowseBoardsAction
-import com.atlassian.performance.tools.jirasoftwareactions.api.actions.ViewBoardAction
 import com.atlassian.performance.tools.jirasoftwareactions.api.boards.AgileBoard
 import com.atlassian.performance.tools.jirasoftwareactions.api.memories.AdaptiveBoardMemory
+import jces1209.vu.action.BrowseDcBoards
 import jces1209.vu.action.CreateAnIssue
 import jces1209.vu.action.SearchServerFilter
+import jces1209.vu.action.ViewDcBoard
 import jces1209.vu.page.DcIssuePage
 import jces1209.vu.page.filters.ServerFiltersPage
 import org.openqa.selenium.By
@@ -63,17 +63,19 @@ class JiraDcScenario : Scenario {
                 meter = meter,
                 projectMemory = similarities.projectMemory
             ),
-            browseBoards = BrowseBoardsAction(
+            browseBoards = BrowseDcBoards(
                 jiraSoftware = jsw,
                 meter = meter,
                 boardsMemory = boardsMemory,
                 scrumBoardsMemory = AdaptiveBoardMemory(seededRandom)
             ),
-            viewBoard = ViewBoardAction(
+            viewBoard = ViewDcBoard(
                 jiraSoftware = jsw,
                 meter = meter,
                 boardMemory = boardsMemory,
-                issueKeyMemory = similarities.issueKeyMemory
+                issueKeyMemory = similarities.issueKeyMemory,
+                random = seededRandom,
+                viewIssueProbability = 0.10f
             )
         )
     }
