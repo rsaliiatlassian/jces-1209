@@ -19,7 +19,10 @@ class WorkAnIssue(
     private val random: SeededRandom,
     private val editProbability: Float,
     private val commentProbability: Float,
-    private val linkIssueProbability: Float
+    private val linkIssueProbability: Float,
+    private val changeAssigneeProbability: Float,
+    private val transitionProbability: Float,
+    private val mentionUserProbability: Float
 ) : Action {
     private val logger: Logger = LogManager.getLogger(this::class.java)
 
@@ -39,6 +42,15 @@ class WorkAnIssue(
         }
         if (random.random.nextFloat() < commentProbability) {
             comment(loadedIssuePage)
+        }
+        if (random.random.nextFloat() < changeAssigneeProbability) {
+            changeAssignee(loadedIssuePage)
+        }
+        if (random.random.nextFloat() < transitionProbability) {
+            transition(loadedIssuePage)
+        }
+        if (random.random.nextFloat() < mentionUserProbability) {
+            mentionUser(loadedIssuePage)
         }
     }
 
@@ -76,6 +88,32 @@ class WorkAnIssue(
         meter.measure(ADD_COMMENT) {
             commenting.openEditor()
             commenting.typeIn("abc def")
+            meter.measure(ADD_COMMENT_SUBMIT) {
+                commenting.saveComment()
+                commenting.waitForTheNewComment()
+            }
+        }
+    }
+
+    private fun changeAssignee(issuePage: AbstractIssuePage) {
+        meter.measure(ActionType("Change Assignee") {Unit}) {
+            issuePage.changeAssignee()
+        }
+    }
+
+    private fun transition(issuePage: AbstractIssuePage) {
+        meter.measure(ActionType("Transition") {Unit}) {
+            issuePage.transition()
+        }
+    }
+
+    //private fun mentionUser(issuePage: AbstractIssuePage, user: String) {
+    private fun mentionUser(issuePage: AbstractIssuePage) {
+        val commenting = issuePage.comment()
+        meter.measure(ActionType("Mention a user") {Unit}) {
+            commenting.openEditor()
+            commenting.typeIn("abc def ")
+            commenting.mentionUser()
             meter.measure(ADD_COMMENT_SUBMIT) {
                 commenting.saveComment()
                 commenting.waitForTheNewComment()

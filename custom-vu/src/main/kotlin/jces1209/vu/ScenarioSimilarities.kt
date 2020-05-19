@@ -49,7 +49,10 @@ class ScenarioSimilarities(
             random = seededRandom,
             editProbability = 0.00f, // 0.10f if we can mutate data
             commentProbability = 0.00f, // 0.04f if we can mutate data
-            linkIssueProbability = 0.00f // 0.10f if we can mutate data
+            linkIssueProbability = 0.00f, // 0.10f if we can mutate data
+            changeAssigneeProbability = 1.00f,
+            transitionProbability = 1.00f,
+            mentionUserProbability = 1.00f
         ),
         projectSummary = ProjectSummaryAction(
             jira = jira,

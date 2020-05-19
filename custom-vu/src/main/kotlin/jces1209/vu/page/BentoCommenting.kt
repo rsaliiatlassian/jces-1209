@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement
 import org.openqa.selenium.interactions.Actions
 import org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable
 import jces1209.vu.wait
+import org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated
 
 class BentoCommenting(
     private val driver: WebDriver
@@ -41,5 +42,22 @@ class BentoCommenting(
 
     override fun waitForTheNewComment() {
         waitForPlaceholder()
+    }
+
+    override fun mentionUser(){
+        var user ="Rostyslav Salii"
+        Actions(driver)
+            .sendKeys("@")
+            .perform()
+
+        driver.wait(presenceOfElementLocated(By.xpath("//*[@data-editor-popup=\"true\"]//*[.=\"Mention your team\"]")))
+
+        Actions(driver)
+            .sendKeys(user)
+            .perform()
+
+        driver.wait(presenceOfElementLocated(By.xpath(String.format("//*[@data-mention-name=\"%s\"]", user))))
+        driver.wait(elementToBeClickable(By.xpath(String.format("//*[@data-mention-name=\"%s\"]", user))))
+            .click()
     }
 }

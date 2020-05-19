@@ -62,6 +62,61 @@ class CloudIssuePage(
         return CloudIssueLinking(driver)
     }
 
+    override fun changeAssignee(): CloudIssuePage{
+        var assignee = "Rostyslav Salii"
+        driver
+            .findElement(By.cssSelector("[data-test-id = 'issue.views.field.user.assignee']"))
+            .click();
+
+        driver
+            .wait(
+                ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class=\"css-dukhv4-menu fabric-user-picker__menu\"]"))
+            )
+
+        Actions(driver)
+            .sendKeys(Keys.DELETE)
+            .perform()
+
+        Actions(driver)
+            .sendKeys(assignee)
+            .perform()
+
+        driver
+            .wait(
+                ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class=\"css-dukhv4-menu fabric-user-picker__menu\"]//*[. = \"Rostyslav Salii\"]"))
+            )
+
+        Actions(driver).
+            sendKeys(Keys.ENTER).
+            perform()
+
+        driver.wait(
+            ExpectedConditions.presenceOfElementLocated(By.ByXPath("//*[@data-test-id=\"issue.views.field.user.assignee\"]//*[.=\"Rostyslav Salii\"]"))
+        )
+
+        return this;
+    }
+
+    override fun transition(): CloudIssuePage {
+        driver
+            .findElement(By.cssSelector("[data-test-id = 'issue.views.issue-base.foundation.status.status-field-wrapper']"))
+            .click();
+
+        var transitionItem = driver
+            .wait(
+                ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@data-test-id=\"issue.fields.status.common.ui.status-lozenge.4\"]//span[. = \"In Progress\"]"))
+            )
+
+        transitionItem.click();
+
+        driver
+            .wait(
+                ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@id=\"helpPanelContainer\"]//span[. = \"In Progress\"]"))
+            )
+
+        return this;
+    }
+
     private fun isCommentingClassic(): Boolean = driver
         .findElements(By.id("footer-comment-button"))
         .isNotEmpty()

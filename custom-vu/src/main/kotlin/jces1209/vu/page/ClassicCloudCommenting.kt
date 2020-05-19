@@ -6,6 +6,7 @@ import org.openqa.selenium.interactions.Actions
 import org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable
 import org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated
 import jces1209.vu.wait
+import java.lang.Exception
 
 class ClassicCloudCommenting(
     private val driver: WebDriver
@@ -36,5 +37,9 @@ class ClassicCloudCommenting(
 
     override fun waitForTheNewComment() {
         driver.wait(visibilityOfElementLocated(By.cssSelector(".activity-comment.focused")))
+    }
+
+    override fun mentionUser() {
+        throw Exception("Not implemented")
     }
 }
