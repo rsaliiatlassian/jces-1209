@@ -25,7 +25,8 @@ class WorkAnIssue(
     private val editProbability: Float,
     private val commentProbability: Float,
     private val linkIssueProbability: Float,
-    private val changeAssigneeProbability: Float
+    private val changeAssigneeProbability: Float,
+    private val mentionUserProbability: Float
 ) : Action {
     private val logger: Logger = LogManager.getLogger(this::class.java)
 
@@ -48,6 +49,9 @@ class WorkAnIssue(
         }
         if (random.random.nextFloat() < changeAssigneeProbability) {
             changeAssignee(loadedIssuePage)
+        }
+        if (random.random.nextFloat() < mentionUserProbability) {
+            mentionUser(loadedIssuePage)
         }
     }
 
@@ -89,6 +93,19 @@ class WorkAnIssue(
         meter.measure(ADD_COMMENT) {
             commenting.openEditor()
             commenting.typeIn("abc def")
+            meter.measure(ADD_COMMENT_SUBMIT) {
+                commenting.saveComment()
+                commenting.waitForTheNewComment()
+            }
+        }
+    }
+
+    private fun mentionUser(issuePage: AbstractIssuePage) {
+        val commenting = issuePage.comment()
+        meter.measure(ActionType("Mention a user") { Unit }) {
+            commenting.openEditor()
+            commenting.typeIn("abc def ")
+            commenting.mentionUser()
             meter.measure(ADD_COMMENT_SUBMIT) {
                 commenting.saveComment()
                 commenting.waitForTheNewComment()

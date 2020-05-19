@@ -6,14 +6,24 @@ import org.openqa.selenium.interactions.Actions
 import org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable
 import org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated
 import jces1209.vu.wait
+import org.openqa.selenium.support.ui.ExpectedConditions
 
 class ClassicCloudCommenting(
     private val driver: WebDriver
 ) : Commenting {
 
+    private val commentButton = By.id("footer-comment-button")
+    private val falliblePage = FalliblePage.Builder(
+        expectedContent = listOf(commentButton),
+        webDriver = driver
+    )
+        .cloudErrors()
+        .build()
+
     override fun openEditor() {
+        falliblePage.waitForPageToLoad()
         driver
-            .wait(elementToBeClickable(By.id("footer-comment-button")))
+            .wait(elementToBeClickable(commentButton))
             .click()
         waitForEditor()
     }
@@ -36,5 +46,16 @@ class ClassicCloudCommenting(
 
     override fun waitForTheNewComment() {
         driver.wait(visibilityOfElementLocated(By.cssSelector(".activity-comment.focused")))
+    }
+
+    override fun mentionUser() {
+        Actions(driver)
+            .sendKeys("@assignee")
+            .perform()
+        driver
+            .wait(ExpectedConditions.presenceOfElementLocated(By.id("mentionDropDown")))
+        driver
+            .wait(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class = 'jira-mention-issue-roles']//*[. = 'assignee']")))
+            .click()
     }
 }
