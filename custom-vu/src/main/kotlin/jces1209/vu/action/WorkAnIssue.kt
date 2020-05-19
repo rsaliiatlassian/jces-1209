@@ -24,7 +24,8 @@ class WorkAnIssue(
     private val random: SeededRandom,
     private val editProbability: Float,
     private val commentProbability: Float,
-    private val linkIssueProbability: Float
+    private val linkIssueProbability: Float,
+    private val transitionProbability: Float
 ) : Action {
     private val logger: Logger = LogManager.getLogger(this::class.java)
 
@@ -44,6 +45,9 @@ class WorkAnIssue(
         }
         if (random.random.nextFloat() < commentProbability) {
             comment(loadedIssuePage)
+        }
+        if (random.random.nextFloat() < transitionProbability) {
+            transition(loadedIssuePage)
         }
     }
 
@@ -88,6 +92,22 @@ class WorkAnIssue(
             meter.measure(ADD_COMMENT_SUBMIT) {
                 commenting.saveComment()
                 commenting.waitForTheNewComment()
+            }
+        }
+    }
+
+    private fun transition(issuePage: AbstractIssuePage) {
+        issuePage.transition()
+        val isTimeSpentFormAppeared = issuePage.isTimeSpentFormAppeared()
+        if (isTimeSpentFormAppeared)
+            issuePage.cancelTimeSpentForm()
+
+        meter.measure(ActionType("Transition") { Unit }) {
+            issuePage.transition()
+            if (isTimeSpentFormAppeared) {
+                meter.measure(ActionType("Transition (Fill in Time Spent form)") { Unit }) {
+                    issuePage.fillInTimeSpentForm()
+                }
             }
         }
     }
