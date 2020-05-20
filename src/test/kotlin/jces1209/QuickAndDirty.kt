@@ -14,8 +14,7 @@ class QuickAndDirty : BenchmarkQuality {
     override fun behave(
         scenario: Class<out Scenario>
     ): VirtualUserBehavior = VirtualUserBehavior.Builder(scenario)
-        //.browser(Firefox::class.java) // local Chrome is flaky around version 80, so let's use Firefox
-        .browser(GoogleChrome::class.java)
+        .browser(Firefox::class.java) // local Chrome is flaky around version 80, so let's use Firefox
         .load(
             VirtualUserLoad.Builder()
                 .ramp(Duration.ZERO)
