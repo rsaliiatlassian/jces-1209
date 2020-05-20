@@ -2,7 +2,6 @@ package jces1209
 
 import com.atlassian.performance.tools.jiraactions.api.scenario.Scenario
 import com.atlassian.performance.tools.virtualusers.api.VirtualUserLoad
-import com.atlassian.performance.tools.virtualusers.api.browsers.GoogleChrome
 import com.atlassian.performance.tools.virtualusers.api.config.VirtualUserBehavior
 import jces1209.vu.Firefox
 import java.time.Duration
