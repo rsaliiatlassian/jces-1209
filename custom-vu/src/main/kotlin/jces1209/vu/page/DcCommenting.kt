@@ -45,8 +45,10 @@ class DcCommenting(
         Actions(driver)
             .sendKeys(mentionUser)
             .perform()
-        driver.wait(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@id='mentionDropDown']//*[.='$mentionUser']")))
-        driver.wait(elementToBeClickable(By.xpath("//*[@id='mentionDropDown']//*[.='$mentionUser']")))
+        mentionUser = mentionUser.substringBefore(" ")
+        val mentionDropDownBy = By.xpath("//*[@id='mentionDropDown']//*[contains(text(),'$mentionUser')])")
+        driver.wait(ExpectedConditions.presenceOfElementLocated(mentionDropDownBy))
+        driver.wait(elementToBeClickable(mentionDropDownBy))
             .click()
     }
 }
