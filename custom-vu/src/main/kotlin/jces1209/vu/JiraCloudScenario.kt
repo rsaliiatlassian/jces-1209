@@ -7,6 +7,7 @@ import com.atlassian.performance.tools.jiraactions.api.measure.ActionMeter
 import com.atlassian.performance.tools.jiraactions.api.memories.UserMemory
 import com.atlassian.performance.tools.jiraactions.api.scenario.Scenario
 import jces1209.vu.action.*
+import jces1209.vu.page.CloudIssueNavigator
 import jces1209.vu.page.CloudIssuePage
 import jces1209.vu.page.boards.browse.cloud.CloudBrowseBoardsPage
 import jces1209.vu.page.customizecolumns.CloudColumnsEditor
@@ -64,7 +65,8 @@ class JiraCloudScenario : Scenario {
                 jira = jira,
                 meter = meter,
                 columnsEditor = CloudColumnsEditor(jira.driver)
-            )
+            ),
+            issueNavigator = CloudIssueNavigator(jira.driver)
         )
     }
 }
