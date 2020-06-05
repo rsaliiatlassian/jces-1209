@@ -15,6 +15,7 @@ import jces1209.vu.memory.SeededMemory
 import jces1209.vu.page.AbstractIssuePage
 import jces1209.vu.page.IssueNavigator
 import jces1209.vu.page.JiraTips
+import jces1209.vu.page.bars.topBar.TopBar
 import jces1209.vu.page.boards.browse.BrowseBoardsPage
 import jces1209.vu.page.filters.FiltersPage
 import java.net.URI
@@ -41,7 +42,8 @@ class ScenarioSimilarities(
         searchWithJql: Action,
         browseProjects: Action,
         customizeColumns: Action,
-        issueNavigator: IssueNavigator
+        issueNavigator: IssueNavigator,
+        topBar: TopBar
     ): List<Action> = assembleScenario(
         createIssue = createIssue,
         customizeColums = customizeColumns,
@@ -99,6 +101,11 @@ class ScenarioSimilarities(
             meter = meter,
             scrumBoardsMemory = boardsMemory.scrum,
             jiraTips = JiraTips(jira.driver)
+        ),
+        workOnTopBar = WorkOnTopBar(
+            topBar=topBar,
+            jira = jira,
+            meter = meter
         )
     )
 
@@ -114,7 +121,8 @@ class ScenarioSimilarities(
         browseBoards: Action,
         viewBoard: Action,
         workOnSprint: WorkOnSprint,
-        workOnSearchResults: Action
+        workOnSearchResults: Action,
+        workOnTopBar: Action
     ): List<Action> {
         val exploreData = listOf(browseProjects, browseFilters, browseBoards)
         val spreadOut = mapOf(
@@ -128,7 +136,8 @@ class ScenarioSimilarities(
             browseBoards to 5,
             viewBoard to 30,
             workOnSprint to 10,
-            workOnSearchResults to 10
+            workOnSearchResults to 10,
+            workOnTopBar to 5
         )
             .map { (action, proportion) -> Collections.nCopies(proportion, action) }
             .flatten()
