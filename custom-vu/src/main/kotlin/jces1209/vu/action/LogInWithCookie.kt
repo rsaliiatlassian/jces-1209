@@ -8,7 +8,8 @@ import jces1209.vu.page.JiraCloudWelcome
 import org.openqa.selenium.Cookie
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.Date
+import java.util.Properties
 
 /**
  * Logs in via Cloud Session cookie. Reads from `cloud-session.properties` classpath resource.

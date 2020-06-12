@@ -1,49 +1,42 @@
 package jces1209.vu.page.boards.view.dc
 
-import jces1209.vu.page.FalliblePage
+import com.atlassian.performance.tools.jiraactions.api.page.wait
 import jces1209.vu.page.boards.view.BoardContent
 import jces1209.vu.page.boards.view.BoardPage
 import jces1209.vu.wait
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.support.ui.ExpectedConditions
-import org.openqa.selenium.support.ui.ExpectedConditions.*
+import java.net.URI
 import java.time.Duration
 
-class DcBoardPage(
-    private val driver: WebDriver,
-    private val issueSelector: By
+abstract class DcBoardPage(
+    driver: WebDriver,
+    uri: URI
+) : BoardPage(
+    driver = driver,
+    uri = uri
 ) {
-    fun waitForBoardPageToLoad(): BoardContent {
-        FalliblePage.Builder(
-            driver,
-            listOf(issueSelector, By.id("ghx-column-headers"))
+    override fun waitForBoardPageToLoad(): BoardContent {
+        driver.wait(
+            Duration.ofSeconds(30),
+            ExpectedConditions.presenceOfElementLocated(issueSelector)
         )
-            .timeout(Duration.ofSeconds(30))
-            .serverErrors()
-            .build()
-            .waitForPageToLoad()
-        return BoardPage.GeneralBoardContent(driver, issueSelector)
+        return GeneralBoardContent(driver, issueSelector)
     }
 
-    fun previewIssue() {
+    override fun previewIssue(): DcBoardPage {
         driver
-            .wait(visibilityOfElementLocated(issueSelector))
+            .wait(ExpectedConditions.visibilityOfElementLocated(issueSelector))
             .click()
 
         driver
             .wait(
                 ExpectedConditions.and(
-                    visibilityOfElementLocated(By.id("ghx-detail-issue")),
-                    visibilityOfElementLocated(By.className("issue-drop-zone"))
+                    ExpectedConditions.visibilityOfElementLocated(By.id("ghx-detail-issue")),
+                    ExpectedConditions.visibilityOfElementLocated(By.className("issue-drop-zone"))
                 ))
-    }
 
-    fun closePreviewIssue() {
-        val closeButton = driver
-            .wait(elementToBeClickable(By.className("aui-iconfont-close-dialog")))
-        closeButton.click()
-
-        driver.wait(invisibilityOf(closeButton))
+        return this;
     }
 }

@@ -30,6 +30,7 @@ class DcBrowseBoardsPage(
             )
         )
         jiraErrors.assertNoErrors()
+
         return DcBoardList(jira)
     }
 }

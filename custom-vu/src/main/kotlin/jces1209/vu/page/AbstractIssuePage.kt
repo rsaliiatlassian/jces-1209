@@ -1,7 +1,5 @@
 package jces1209.vu.page
 
-import jces1209.vu.page.contextoperation.ContextOperationIssue
-
 interface AbstractIssuePage {
 
     fun waitForSummary(): AbstractIssuePage
@@ -11,8 +9,5 @@ interface AbstractIssuePage {
     fun transition(): AbstractIssuePage
     fun isTimeSpentFormAppeared(): Boolean
     fun fillInTimeSpentForm(): AbstractIssuePage
-    fun addAttachment(): AttachScreenShot
-    fun changeAssignee(): AbstractIssuePage
-    fun contextOperation(): ContextOperationIssue
     fun cancelTimeSpentForm(): AbstractIssuePage
 }

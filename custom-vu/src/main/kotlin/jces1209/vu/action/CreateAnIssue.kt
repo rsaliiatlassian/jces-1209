@@ -8,7 +8,6 @@ import com.atlassian.performance.tools.jiraactions.api.measure.ActionMeter
 import com.atlassian.performance.tools.jiraactions.api.memories.ProjectMemory
 import com.atlassian.performance.tools.jiraactions.api.page.form.IssueForm
 import com.atlassian.performance.tools.jiraactions.api.page.wait
-import jces1209.vu.MeasureType.Companion.CREATE_ISSUE_MODAL
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.openqa.selenium.By
@@ -48,7 +47,6 @@ class CreateAnIssue(
 
     private fun openDialog(): IssueForm {
         val driver = jira.driver
-        meter.measure(CREATE_ISSUE_MODAL) {
         driver
             .wait(
                 condition = or(*createIssueButtons.map { elementToBeClickable(it) }.toTypedArray()),
@@ -58,15 +56,13 @@ class CreateAnIssue(
         createIssueButtons
             .flatMap { driver.findElements(it) }
             .filter { it.isDisplayed }
-            .first()
-            .click()
-            
-            driver.wait(
-                condition = visibilityOfElementLocated(By.id("create-issue-dialog")),
-                timeout = Duration.ofSeconds(30)
-            )
-            (driver as JavascriptExecutor).executeScript("window.onbeforeunload = null")
-        }
+            .forEach { it.click() }
+
+        driver.wait(
+            condition = visibilityOfElementLocated(By.id("create-issue-dialog")),
+            timeout = Duration.ofSeconds(30)
+        )
+        (driver as JavascriptExecutor).executeScript("window.onbeforeunload = null")
         return IssueForm(By.cssSelector("form[name=jiraform]"), driver)
     }
 }

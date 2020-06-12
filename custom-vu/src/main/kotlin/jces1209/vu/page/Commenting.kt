@@ -6,5 +6,4 @@ interface Commenting {
     fun typeIn(comment: String)
     fun saveComment()
     fun waitForTheNewComment()
-    fun mentionUser()
 }

@@ -1,6 +1,6 @@
 import java.io.File
 import java.net.URI
-import java.util.*
+import java.util.Properties
 
 class CohortProperties(
     val jira: URI,

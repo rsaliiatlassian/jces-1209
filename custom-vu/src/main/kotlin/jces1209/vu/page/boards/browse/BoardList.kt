@@ -1,18 +1,17 @@
 package jces1209.vu.page.boards.browse
 
-import jces1209.vu.page.boards.view.KanbanBoardPage
-import jces1209.vu.page.boards.view.NextGenBoardPage
-import jces1209.vu.page.boards.view.ScrumBacklogPage
-import jces1209.vu.page.boards.view.ScrumSprintPage
+import jces1209.vu.page.boards.view.BoardPage
 
 abstract class BoardList {
 
-    abstract fun listBoards(): MixedBoards
+    /**
+     * @return key - board type, value - list of board pages
+     */
+    abstract fun listBoards(): Map<String, Collection<BoardPage>>
 
-    class MixedBoards(
-        val kanban: Collection<KanbanBoardPage>,
-        val backlog: Collection<ScrumBacklogPage>,
-        val sprint: Collection<ScrumSprintPage>,
-        val nextGen: Collection<NextGenBoardPage>
-    )
+    companion object {
+        const val boardNameKanban = "Kanban"
+        const val boardNameScrum = "Scrum"
+        const val boardNameNextGen = "Next-gen"
+    }
 }
