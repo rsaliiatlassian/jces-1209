@@ -8,9 +8,7 @@ import com.atlassian.performance.tools.jiraactions.api.memories.Memory
 import com.atlassian.performance.tools.jiraactions.api.page.IssueNavigatorPage
 import jces1209.vu.wait
 import org.openqa.selenium.By
-import org.openqa.selenium.support.ui.ExpectedConditions.and
-import org.openqa.selenium.support.ui.ExpectedConditions.or
-import org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated
+import org.openqa.selenium.support.ui.ExpectedConditions.*
 import java.net.URI
 
 class SearchServerFilter(

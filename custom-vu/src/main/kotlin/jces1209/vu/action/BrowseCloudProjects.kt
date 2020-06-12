@@ -6,7 +6,6 @@ import com.atlassian.performance.tools.jiraactions.api.action.Action
 import com.atlassian.performance.tools.jiraactions.api.measure.ActionMeter
 import com.atlassian.performance.tools.jiraactions.api.memories.ProjectMemory
 import jces1209.vu.page.JiraCloudProjectList
-import java.time.Duration
 
 class BrowseCloudProjects(
     private val jira: WebJira,

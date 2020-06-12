@@ -1,9 +1,7 @@
 package extract.to.lib.jpt.report
 
 import com.atlassian.performance.tools.jiraactions.api.ActionMetric
-import extract.to.lib.jpt.report.Apdex.Satisfaction.FRUSTRATED
-import extract.to.lib.jpt.report.Apdex.Satisfaction.SATISFACTORY
-import extract.to.lib.jpt.report.Apdex.Satisfaction.TOLERATING
+import extract.to.lib.jpt.report.Apdex.Satisfaction.*
 import java.time.Duration
 
 class Apdex(

@@ -6,18 +6,19 @@ import com.atlassian.performance.tools.jiraactions.api.action.Action
 import com.atlassian.performance.tools.jiraactions.api.measure.ActionMeter
 import com.atlassian.performance.tools.jiraactions.api.memories.UserMemory
 import com.atlassian.performance.tools.jiraactions.api.scenario.Scenario
-import jces1209.vu.action.BrowseCloudProjects
-import jces1209.vu.action.CreateAnIssue
-import jces1209.vu.action.LogInWithAtlassianId
-import jces1209.vu.action.SearchCloudFilter
+import jces1209.vu.action.*
+import jces1209.vu.page.CloudIssueNavigator
 import jces1209.vu.page.CloudIssuePage
+import jces1209.vu.page.bars.topBar.cloud.CloudTopBar
 import jces1209.vu.page.boards.browse.cloud.CloudBrowseBoardsPage
+import jces1209.vu.page.customizecolumns.CloudColumnsEditor
+import jces1209.vu.page.dashboard.cloud.CloudDashboardPage
 import jces1209.vu.page.filters.CloudFiltersPage
+import jces1209.vu.page.project.CloudProjectNavigatorPage
 import org.openqa.selenium.By
 import org.openqa.selenium.TakesScreenshot
 
 class JiraCloudScenario : Scenario {
-
     override fun getLogInAction(
         jira: WebJira,
         meter: ActionMeter,
@@ -61,7 +62,27 @@ class JiraCloudScenario : Scenario {
                 jira = jira,
                 meter = meter,
                 projectMemory = similarities.projectMemory
-            )
+            ),
+            workOnDashboard = WorkOnDashboard(
+                jira = jira,
+                meter = meter,
+                projectKeyMemory = similarities.projectMemory,
+                dashboardPage = CloudDashboardPage(jira)
+            ),
+            browseProjectIssues = BrowseProjectIssues(
+                jira = jira,
+                meter = meter,
+                projectKeyMemory = similarities.projectMemory,
+                browseProjectPage = CloudProjectNavigatorPage(jira.driver)
+            ),
+            customizeColumns = CustomizeColumns(
+                jira = jira,
+                meter = meter,
+                columnsEditor = CloudColumnsEditor(jira.driver)
+            ),
+            issueNavigator = CloudIssueNavigator(jira.driver),
+            topBar = CloudTopBar(jira.driver)
         )
     }
 }
+

@@ -6,11 +6,7 @@ import com.amazonaws.auth.EC2ContainerCredentialsProviderWrapper
 import com.amazonaws.auth.STSAssumeRoleSessionCredentialsProvider
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.regions.Regions
-import com.amazonaws.regions.Regions.EU_CENTRAL_1
-import com.amazonaws.regions.Regions.EU_WEST_1
-import com.amazonaws.regions.Regions.EU_WEST_2
-import com.amazonaws.regions.Regions.US_EAST_1
-import com.amazonaws.regions.Regions.US_WEST_1
+import com.amazonaws.regions.Regions.*
 import com.atlassian.performance.tools.aws.api.Aws
 import com.atlassian.performance.tools.aws.api.DependentResources
 import com.atlassian.performance.tools.aws.api.Investment
@@ -23,7 +19,7 @@ import com.atlassian.performance.tools.io.api.dereference
 import com.atlassian.performance.tools.io.api.ensureDirectory
 import java.nio.file.Path
 import java.time.Duration
-import java.util.UUID
+import java.util.*
 import java.util.concurrent.CompletableFuture
 
 class AwsVus(

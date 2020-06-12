@@ -1,4 +1,4 @@
-package jces1209.vu
+package jces1209.vu.memory
 
 import com.atlassian.performance.tools.jiraactions.api.SeededRandom
 import com.atlassian.performance.tools.jiraactions.api.memories.Memory

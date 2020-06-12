@@ -1,8 +1,10 @@
 package jces1209.vu.page.boards.view.cloud
 
 import jces1209.vu.page.FalliblePage
+import jces1209.vu.page.boards.configure.CloudConfigureBoard
+import jces1209.vu.page.boards.configure.ConfigureBoard
 import jces1209.vu.page.boards.view.BoardContent
-import jces1209.vu.page.boards.view.BoardPage
+import jces1209.vu.page.boards.view.NextGenBoardPage
 import jces1209.vu.wait
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
@@ -11,9 +13,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated
 import java.net.URI
 
-class NextGenBoardPage(
+class CloudNextGenBoardPage(
     driver: WebDriver, uri: URI
-) : BoardPage(driver, uri) {
+) : NextGenBoardPage(driver, uri) {
     override val issueSelector = By.cssSelector("[data-test-id='platform-board-kit.ui.card.card']")
 
     private val falliblePage = FalliblePage.Builder(
@@ -37,7 +39,7 @@ class NextGenBoardPage(
         return NextGenBoardContent(issueCards)
     }
 
-    override fun previewIssue(): NextGenBoardPage {
+    override fun previewIssue(): CloudNextGenBoardPage {
         driver
             .wait(visibilityOfElementLocated(issueSelector))
             .click()
@@ -50,6 +52,14 @@ class NextGenBoardPage(
                 ))
 
         return this;
+    }
+
+    override fun closePreviewIssue() {
+        CloudClassicBoardPage(driver, issueSelector).closePreviewIssue()
+    }
+
+    override fun configure(): ConfigureBoard {
+        return CloudConfigureBoard(driver)
     }
 
     private fun findIssueCards(): List<WebElement> {

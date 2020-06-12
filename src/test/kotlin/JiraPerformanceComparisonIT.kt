@@ -18,7 +18,6 @@ import jces1209.vu.JiraCloudScenario
 import jces1209.vu.JiraDcScenario
 import org.apache.logging.log4j.core.config.ConfigurationFactory
 import org.junit.Test
-import java.io.File
 import java.nio.file.Paths
 import java.time.Duration
 import java.util.concurrent.CompletableFuture

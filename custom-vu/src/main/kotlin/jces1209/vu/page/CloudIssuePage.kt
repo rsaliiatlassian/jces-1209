@@ -1,6 +1,7 @@
 package jces1209.vu.page
 
 import com.atlassian.performance.tools.jiraactions.api.page.wait
+import jces1209.vu.page.contextoperation.ContextOperationIssue
 import jces1209.vu.wait
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
@@ -8,6 +9,8 @@ import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.interactions.Actions
+import org.openqa.selenium.support.ui.ExpectedConditions.invisibilityOfAllElements
+import org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
 import java.time.Duration
@@ -170,6 +173,44 @@ class CloudIssuePage(
             )
             .click()
         return this
+    }
+
+    override fun addAttachment(): CloudAddScreenShot {
+        return CloudAddScreenShot(driver)
+    }
+
+    override fun changeAssignee(): CloudIssuePage {
+        driver
+            .findElement(By.cssSelector("[data-test-id = 'issue.views.field.user.assignee']"))
+            .click();
+
+        var userList = driver
+            .wait(
+                ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[contains(@class,'fabric-user-picker__menu-list')]/*"))
+            )
+
+        if (userList.size == 1 && userList[0].text == "No options") {
+            logger.debug("No user options for Assignee")
+            throw InterruptedException("No options for Assignee")
+        }
+
+        val firstUser = driver
+            .wait(
+                ExpectedConditions.presenceOfElementLocated(By.id("react-select-assignee-option-0"))
+            )
+
+        var userName = firstUser.text.removeSuffix(" (Assign to me)")
+        firstUser.click()
+
+        driver.wait(
+            ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@data-test-id='issue.views.field.user.assignee']//*[.='$userName']"))
+        )
+
+        return this;
+    }
+
+    override fun contextOperation(): ContextOperationIssue {
+        return ContextOperationIssue(driver)
     }
 
     private fun isCommentingClassic(): Boolean = driver
