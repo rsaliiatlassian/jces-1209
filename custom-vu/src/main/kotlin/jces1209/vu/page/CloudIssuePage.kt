@@ -5,7 +5,6 @@ import jces1209.vu.wait
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.openqa.selenium.By
-import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.interactions.Actions
@@ -71,7 +70,9 @@ class CloudIssuePage(
         try {
             driver
                 .wait(
-                    ExpectedConditions.presenceOfElementLocated(By.id("log-work-time-logged"))
+                    ExpectedConditions.or(
+                        ExpectedConditions.presenceOfElementLocated(By.id("log-work-time-logged"))
+                    )
                 )
         } catch (e: Exception) {
             return false
@@ -80,16 +81,17 @@ class CloudIssuePage(
     }
 
     override fun cancelTimeSpentForm(): AbstractIssuePage {
+        val transitionCancelLocator = By.id("issue-workflow-transition-cancel")
         driver
             .wait(
                 timeout = Duration.ofSeconds(5),
-                condition = ExpectedConditions.presenceOfElementLocated(By.id("issue-workflow-transition-cancel"))
+                condition = ExpectedConditions.presenceOfElementLocated(transitionCancelLocator)
             )
             .click()
         driver
             .wait(
                 timeout = Duration.ofSeconds(7),
-                condition = ExpectedConditions.invisibilityOfElementLocated(By.id("issue-workflow-transition-cancel"))
+                condition = ExpectedConditions.invisibilityOfElementLocated(transitionCancelLocator)
             )
 
         return this
@@ -155,13 +157,12 @@ class CloudIssuePage(
     }
 
     override fun transition(): CloudIssuePage {
-        waitForPage()
+        falliblePage.waitForPageToLoad()
         waitForNotWatchingElement()
         waitForTransitionButton()
         clickOnElementUntilVisible(By.xpath("//*[@data-test-id = 'issue.views.issue-base.foundation.status.status-field-wrapper']//button"),
             By.xpath("//*[@data-test-id = 'issue.views.issue-base.foundation.status.status-field-wrapper']//*[contains(@data-test-id,\"issue.fields.status.common.ui.status-lozenge\")]")
         )
-        waitForPage()
         driver
             .wait(
                 timeout = Duration.ofSeconds(7),
@@ -169,12 +170,6 @@ class CloudIssuePage(
             )
             .click()
         return this
-    }
-
-    private fun waitForPage() {
-        val executor = driver as JavascriptExecutor
-        WebDriverWait(driver, 1)
-            .until { executor.executeScript("return document.readyState") == "complete" }
     }
 
     private fun isCommentingClassic(): Boolean = driver

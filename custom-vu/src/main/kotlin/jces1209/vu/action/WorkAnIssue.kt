@@ -9,9 +9,13 @@ import jces1209.vu.MeasureType.Companion.ISSUE_LINK
 import jces1209.vu.MeasureType.Companion.ISSUE_LINK_LOAD_FORM
 import jces1209.vu.MeasureType.Companion.ISSUE_LINK_SEARCH_CHOOSE
 import jces1209.vu.MeasureType.Companion.ISSUE_LINK_SUBMIT
+import jces1209.vu.MeasureType.Companion.TRANSITION
+import jces1209.vu.MeasureType.Companion.TRANSITION_FILL_IN_TIME_SPENT_FORM
 import jces1209.vu.page.AbstractIssuePage
+import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import org.apache.logging.log4j.core.config.Configurator
 
 /**
  * Works for both Cloud and Data Center.
@@ -27,7 +31,7 @@ class WorkAnIssue(
     private val linkIssueProbability: Float,
     private val transitionProbability: Float
 ) : Action {
-    private val logger: Logger = LogManager.getLogger(this::class.java)
+    private val logger: Logger = LogManager.getLogger(WorkAnIssue::class.java)
 
     override fun run() {
         val issueKey = issueKeyMemory.recall()
@@ -97,15 +101,17 @@ class WorkAnIssue(
     }
 
     private fun transition(issuePage: AbstractIssuePage) {
+        logger.info("transition start")
         issuePage.transition()
+        //TODO("use ExpectedConditions.or() instead of isTimeSpentFormAppeared")
         val isTimeSpentFormAppeared = issuePage.isTimeSpentFormAppeared()
         if (isTimeSpentFormAppeared)
             issuePage.cancelTimeSpentForm()
 
-        meter.measure(ActionType("Transition") { Unit }) {
+        meter.measure(TRANSITION) {
             issuePage.transition()
             if (isTimeSpentFormAppeared) {
-                meter.measure(ActionType("Transition (Fill in Time Spent form)") { Unit }) {
+                meter.measure(TRANSITION_FILL_IN_TIME_SPENT_FORM) {
                     issuePage.fillInTimeSpentForm()
                 }
             }

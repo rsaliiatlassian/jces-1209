@@ -17,6 +17,13 @@ class DcIssuePage(
     private val driver: WebDriver
 ) : AbstractIssuePage {
     private val logger: Logger = LogManager.getLogger(this::class.java)
+    private val transitionBtn = By.id("opsbar-opsbar-transitions")
+    private val falliblePage = FalliblePage.Builder(
+        expectedContent = listOf(transitionBtn),
+        webDriver = driver
+    )
+        .cloudErrors()
+        .build()
 
     override fun waitForSummary(): DcIssuePage {
         val jiraErrors = JiraErrors(driver)
@@ -77,16 +84,17 @@ class DcIssuePage(
     }
 
     override fun cancelTimeSpentForm(): AbstractIssuePage {
+        val cancelButton = org.openqa.selenium.By.id("issue-workflow-transition-cancel")
         driver
             .wait(
                 timeout = Duration.ofSeconds(5),
-                condition = ExpectedConditions.presenceOfElementLocated(By.id("issue-workflow-transition-cancel"))
+                condition = ExpectedConditions.presenceOfElementLocated(cancelButton)
             )
             .click()
         driver
             .wait(
                 timeout = Duration.ofSeconds(7),
-                condition = ExpectedConditions.invisibilityOfElementLocated(By.id("issue-workflow-transition-cancel"))
+                condition = ExpectedConditions.invisibilityOfElementLocated(cancelButton)
             )
         return this
     }
@@ -114,7 +122,8 @@ class DcIssuePage(
     }
 
     override fun transition(): DcIssuePage {
-        waitForPage()
+        falliblePage.waitForPageToLoad()
+        //TODO("reduce this workaround")
         WebDriverWait(driver, 7)
             .until {
                 try {
@@ -128,13 +137,6 @@ class DcIssuePage(
                     false
                 }
             }
-        waitForPage()
         return this
-    }
-
-    private fun waitForPage() {
-        val executor = driver as JavascriptExecutor
-        WebDriverWait(driver, 1)
-            .until { executor.executeScript("return document.readyState") == "complete" }
     }
 }
