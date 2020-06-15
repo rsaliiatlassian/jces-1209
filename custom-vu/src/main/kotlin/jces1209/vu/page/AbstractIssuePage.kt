@@ -11,4 +11,8 @@ interface AbstractIssuePage {
     fun addAttachment(): AttachScreenShot
     fun changeAssignee(): AbstractIssuePage
     fun contextOperation(): ContextOperationIssue
+    fun transition(): AbstractIssuePage
+    fun isTimeSpentFormAppeared(): Boolean
+    fun fillInTimeSpentForm(): AbstractIssuePage
+    fun cancelTimeSpentForm(): AbstractIssuePage
 }

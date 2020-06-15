@@ -4,6 +4,7 @@ import com.atlassian.performance.tools.jiraactions.api.*
 import com.atlassian.performance.tools.jiraactions.api.action.Action
 import com.atlassian.performance.tools.jiraactions.api.measure.ActionMeter
 import com.atlassian.performance.tools.jiraactions.api.memories.IssueKeyMemory
+import jces1209.vu.MeasureType
 import jces1209.vu.MeasureType.Companion.ATTACH_SCREENSHOT
 import jces1209.vu.MeasureType.Companion.CONTEXT_OPERATION_ISSUE
 import jces1209.vu.MeasureType.Companion.ISSUE_EDIT_DESCRIPTION
@@ -32,7 +33,8 @@ class WorkAnIssue(
     private val attachScreenShotProbability: Float,
     private val changeAssigneeProbability: Float,
     private val mentionUserProbability: Float,
-    private val contextOperationProbability: Float
+    private val contextOperationProbability: Float,
+    private val transitionProbability: Float
 ) : Action {
     private val logger: Logger = LogManager.getLogger(this::class.java)
 
@@ -65,6 +67,9 @@ class WorkAnIssue(
         }
         if (random.random.nextFloat() < contextOperationProbability) {
             contextOperation(loadedIssuePage)
+        }
+        if (random.random.nextFloat() < transitionProbability) {
+            transition(loadedIssuePage)
         }
     }
 
@@ -124,12 +129,14 @@ class WorkAnIssue(
             attachScreenShot.pasteScreenShot()
         }
     }
+
     private fun openScreenShot() {
         meter.measure(OPEN_MEDIA_VIEWER) {
             issuePage.addAttachment().openScreenShot()
         }
             .closeMediaViewModal()
     }
+
     private fun mentionUser(issuePage: AbstractIssuePage) {
         val commenting = issuePage.comment()
         meter.measure(ActionType("Mention a user") { Unit }) {
@@ -156,5 +163,23 @@ class WorkAnIssue(
                 .open()
         }
             .close()
+    }
+
+    private fun transition(issuePage: AbstractIssuePage) {
+        logger.info("transition start")
+        issuePage.transition()
+        //TODO("use ExpectedConditions.or() instead of isTimeSpentFormAppeared")
+        val isTimeSpentFormAppeared = issuePage.isTimeSpentFormAppeared()
+        if (isTimeSpentFormAppeared)
+            issuePage.cancelTimeSpentForm()
+
+        meter.measure(MeasureType.TRANSITION) {
+            issuePage.transition()
+            if (isTimeSpentFormAppeared) {
+                meter.measure(MeasureType.TRANSITION_FILL_IN_TIME_SPENT_FORM) {
+                    issuePage.fillInTimeSpentForm()
+                }
+            }
+        }
     }
 }

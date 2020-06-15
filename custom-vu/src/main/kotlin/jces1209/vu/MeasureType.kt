@@ -78,6 +78,12 @@ class MeasureType {
         var TOP_BAR_QUICK_SEARCH = ActionType("Quick search top bar") { Unit }
 
         @JvmField
+        val TRANSITION = ActionType("Transition") { Unit }
+
+        @JvmField
+        val TRANSITION_FILL_IN_TIME_SPENT_FORM = ActionType("Transition (Fill in Time Spent form)") { Unit }
+
+        @JvmField
         val BROWSE_PROJECT_ISSUES= ActionType("Browse project issues") { Unit }
 
         @JvmField

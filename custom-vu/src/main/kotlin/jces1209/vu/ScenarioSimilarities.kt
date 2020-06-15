@@ -66,6 +66,7 @@ class ScenarioSimilarities(
             attachScreenShotProbability = 0.00f,
             changeAssigneeProbability = 0.00f,
             mentionUserProbability = 0.00f,
+            transitionProbability = 0.00f,
             contextOperationProbability = 0.05f
         ),
         projectSummary = ProjectSummaryAction(
