@@ -17,6 +17,7 @@ import jces1209.vu.page.JiraTips
 import jces1209.vu.page.bars.side.SideBar
 import jces1209.vu.page.bars.topBar.TopBar
 import jces1209.vu.page.boards.browse.BrowseBoardsPage
+import jces1209.vu.page.bulkOperation.BulkOperation
 import jces1209.vu.page.customizecolumns.ColumnsEditor
 import jces1209.vu.page.filters.FiltersPage
 import java.net.URI
@@ -45,6 +46,7 @@ class ScenarioSimilarities(
         issueNavigator: IssueNavigator,
         columnsEditor: ColumnsEditor,
         topBar: TopBar,
+        bulkOperation: BulkOperation,
         sideBar: SideBar
     ): List<Action> = assembleScenario(
         createIssue = createIssue,
@@ -118,6 +120,12 @@ class ScenarioSimilarities(
             customizeColumnsProbability = 0.05f,
             switchBetweenIssuesProbability = 0.05f
         ),
+        bulkEdit = BulkEdit(
+            issueNavigator = issueNavigator,
+            bulkOperation = bulkOperation,
+            jira = jira,
+            meter = meter
+        ),
         workOnTransition = WorkOnTransition(
             meter = meter,
             boardsMemory = boardsMemory.sprint,
@@ -139,6 +147,7 @@ class ScenarioSimilarities(
         browseProjectIssues: Action,
         workOnSearch: Action,
         workOnTopBar: Action,
+        bulkEdit: Action,
         workOnTransition: Action
     ): List<Action> {
         val exploreData = listOf(browseProjects, browseFilters, browseBoards)
@@ -154,6 +163,7 @@ class ScenarioSimilarities(
             browseProjectIssues to 5,
             workOnSearch to 5,
             workOnTopBar to 5,
+            bulkEdit to 5,
             workOnTransition to 5
         )
             .map { (action, proportion) -> Collections.nCopies(proportion, action) }

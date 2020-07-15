@@ -1,18 +1,23 @@
 package jces1209.vu.page
 
 import com.atlassian.performance.tools.jiraactions.api.WebJira
+import jces1209.vu.page.bulkOperation.BulkOperation
+import jces1209.vu.page.bulkOperation.cloud.CloudBulkOperation
 import jces1209.vu.wait
 import org.openqa.selenium.By
-import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ui.ExpectedConditions
-import org.openqa.selenium.support.ui.ExpectedConditions.*
+import org.openqa.selenium.support.ui.ExpectedConditions.and
+import org.openqa.selenium.support.ui.ExpectedConditions.or
+import org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated
 import java.time.Duration
 import java.util.*
 
 class CloudIssueNavigator(
     jira: WebJira
-) : IssueNavigator(jira) {
+): IssueNavigator(jira) {
+    private val meatballTriggerLocator = By.id("jira-meatball-trigger")
+    private val bulkEditAllLocator = By.id("bulkedit_all")
     private val falliblePage = FalliblePage.Builder(
         driver,
         or(
@@ -54,6 +59,29 @@ class CloudIssueNavigator(
                 ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@aria-label='Add attachment']"))
             )
         )
+    }
+
+    override fun clickOnTools() {
+        driver
+            .wait(
+                ExpectedConditions.elementToBeClickable(meatballTriggerLocator)
+            )
+            .click()
+        driver
+            .wait(
+                ExpectedConditions.visibilityOfElementLocated(bulkEditAllLocator)
+            )
+    }
+
+    override fun selectCurrentPageToolsItem(): BulkOperation {
+        driver
+            .wait(
+                ExpectedConditions.visibilityOfElementLocated(bulkEditAllLocator)
+            )
+            .click()
+        val cloudBulkOperation = CloudBulkOperation(driver)
+        cloudBulkOperation.waitForBulkOperationPage()
+        return cloudBulkOperation
     }
 
     private fun getIssueElementFromList(): WebElement {

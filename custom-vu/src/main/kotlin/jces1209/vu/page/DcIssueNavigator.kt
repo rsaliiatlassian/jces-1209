@@ -1,9 +1,10 @@
 package jces1209.vu.page
 
 import com.atlassian.performance.tools.jiraactions.api.WebJira
+import jces1209.vu.page.bulkOperation.BulkOperation
+import jces1209.vu.page.bulkOperation.dc.DcBulkOperation
 import jces1209.vu.wait
 import org.openqa.selenium.By
-import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.ExpectedConditions.*
@@ -13,6 +14,8 @@ import java.util.*
 class DcIssueNavigator(
     jira: WebJira
 ) : IssueNavigator(jira) {
+    private val meatballTriggerLocator = By.id("AJS_DROPDOWN__80")
+    private val bulkEditAllLocator = By.id("bulkedit_max")
     private val falliblePage = FalliblePage.Builder(
         driver,
         and(
@@ -45,6 +48,29 @@ class DcIssueNavigator(
                 visibilityOfElementLocated(By.id("project-avatar"))
             )
         )
+    }
+
+    override fun clickOnTools() {
+        driver
+            .wait(
+                ExpectedConditions.elementToBeClickable(meatballTriggerLocator)
+            )
+            .click()
+        driver
+            .wait(
+                ExpectedConditions.visibilityOfElementLocated(bulkEditAllLocator)
+            )
+    }
+
+    override fun selectCurrentPageToolsItem(): BulkOperation {
+        driver
+            .wait(
+                ExpectedConditions.visibilityOfElementLocated(bulkEditAllLocator)
+            )
+            .click()
+        val bulkOperation = DcBulkOperation(driver)
+        bulkOperation.waitForBulkOperationPage()
+        return bulkOperation
     }
 
     private fun getIssueElementFromList(): WebElement {

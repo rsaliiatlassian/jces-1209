@@ -16,6 +16,7 @@ import jces1209.vu.page.DcIssuePage
 import jces1209.vu.page.bars.side.DcSideBar
 import jces1209.vu.page.bars.topBar.dc.DcTopBar
 import jces1209.vu.page.boards.browse.dc.DcBrowseBoardsPage
+import jces1209.vu.page.bulkOperation.dc.DcBulkOperation
 import jces1209.vu.page.customizecolumns.DcColumnsEditor
 import jces1209.vu.page.dashboard.dc.DcDashboardPage
 import jces1209.vu.page.filters.ServerFiltersPage
@@ -75,6 +76,7 @@ class JiraDcScenario : Scenario {
             issueNavigator = DcIssueNavigator(jira),
             columnsEditor = DcColumnsEditor(jira.driver),
             topBar = DcTopBar(jira.driver),
+            bulkOperation = DcBulkOperation(jira.driver),
             sideBar = DcSideBar(jira)
         )
     }

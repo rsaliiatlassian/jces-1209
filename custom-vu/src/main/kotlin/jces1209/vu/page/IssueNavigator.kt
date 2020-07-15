@@ -1,5 +1,6 @@
 package jces1209.vu.page
 
+import jces1209.vu.page.bulkOperation.BulkOperation
 import com.atlassian.performance.tools.jiraactions.api.WebJira
 
 abstract class IssueNavigator(
@@ -9,6 +10,8 @@ abstract class IssueNavigator(
     
     abstract fun waitForNavigator()
     abstract fun selectIssue()
+    abstract fun clickOnTools()
+    abstract fun selectCurrentPageToolsItem(): BulkOperation
 
     fun openNavigator(): IssueNavigator {
         jira.goToIssueNavigator("resolution = Unresolved ORDER BY priority DESC")

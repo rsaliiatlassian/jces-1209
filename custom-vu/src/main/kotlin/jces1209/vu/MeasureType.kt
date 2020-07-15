@@ -96,6 +96,33 @@ class MeasureType {
         var VIEW_DASHBOARD = ActionType("View Dasboard") { Unit }
 
         @JvmField
+        val BULK_EDIT = ActionType("Bulk Edit") { Unit }
+
+        @JvmField
+        val BULK_EDIT_CLICK_ON_TOOLS = ActionType("Bulk Edit (Click on tools)") { Unit }
+
+        @JvmField
+        val BULK_EDIT_CHOOSE_CURRENT_PAGE = ActionType("Bulk Edit (Choose current page)") { Unit }
+
+        @JvmField
+        val BULK_EDIT_CHOOSE_ISSUES= ActionType("Bulk Edit (Choose issues)") { Unit }
+
+        @JvmField
+        val BULK_EDIT_CHOOSE_OPERATION= ActionType("Bulk Edit (Choose Operation)") { Unit }
+
+        @JvmField
+        val BULK_EDIT_OPERATION_DETAILS= ActionType("Bulk Edit (Operation Details)") { Unit }
+
+        @JvmField
+        val BULK_EDIT_CONFIRMATION = ActionType("Bulk Edit (Confirmation)") { Unit }
+
+        @JvmField
+        val BULK_EDIT_PROGRESS= ActionType("Bulk Edit (Bulk operation progress)") { Unit }
+
+        @JvmField
+        val BULK_OPERATION_SUBMIT= ActionType("Bulk Edit (Bulk operation submit)") { Unit }
+
+        @JvmField
         var TRANSITION_VIEW_BOARD = ActionType("View Board (Transition)") { Unit }
 
         @JvmField
