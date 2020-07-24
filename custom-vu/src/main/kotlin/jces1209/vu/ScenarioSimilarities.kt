@@ -147,7 +147,8 @@ class ScenarioSimilarities(
             searchJclProbability = 0.05f,
             globalSearchProbability = 0.50f,
             customizeColumnsProbability = 0.05f,
-            switchBetweenIssuesProbability = 0.15f
+            switchBetweenIssuesProbability = 0.15f,
+            subscribeToFilterProbability = 0.00f
         ),
         bulkEdit = BulkEdit(
             measure = measure,

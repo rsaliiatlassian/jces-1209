@@ -112,6 +112,21 @@ class MeasureType {
         val MOVE_ISSUE_STATUS_BOARD_SUBMIT_WINDOW = ActionType("Move Issue Status on Board (Submit modal window)") { Unit }
 
         @JvmField
+        val SUBSCRIBE_TO_FILTER = ActionType("Subscribe To Filter") { Unit }
+
+        @JvmField
+        val SUBSCRIBE_TO_FILTER_DETAILS_WDW = ActionType("Subscribe To Filter (Show Details Window)") { Unit }
+
+        @JvmField
+        val SUBSCRIBE_TO_FILTER_NEW_SUBSCR = ActionType("Subscribe To Filter (New Subscription)") { Unit }
+
+        @JvmField
+        val SUBSCRIBE_TO_FILTER_SUBSCR_SUBM = ActionType("Subscribe To Filter (Submit Subscribe)") { Unit }
+
+        @JvmField
+        val MANAGE_SUBSCR = ActionType("Manage Subscriptions") { Unit }
+
+        @JvmField
         val ATTACH_SCREENSHOT = ActionType("Attach screenshot") { Unit }
 
         @JvmField

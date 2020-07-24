@@ -3,6 +3,8 @@ package jces1209.vu.page.issuenavigator
 import com.atlassian.performance.tools.jiraactions.api.WebJira
 import jces1209.vu.page.FalliblePage
 import jces1209.vu.page.issuenavigator.bulkoperation.BulkOperationPage
+import jces1209.vu.page.ViewSubscriptions.ViewSubscriptions
+import jces1209.vu.page.ViewSubscriptions.cloud.CloudViewSubscriptions
 import jces1209.vu.page.issuenavigator.bulkoperation.CloudBulkOperationPage
 import jces1209.vu.wait
 import org.openqa.selenium.By
@@ -23,7 +25,8 @@ class CloudIssueNavigator(
                 or(
                     presenceOfElementLocated(By.cssSelector("ol.issue-list")),
                     presenceOfElementLocated(By.id("issuetable")),
-                    presenceOfElementLocated(By.id("issue-content"))
+                    presenceOfElementLocated(By.id("issue-content")),
+                    presenceOfElementLocated(filterDetailsLocator)
                 ),
                 or(
                     presenceOfElementLocated(By.id("jira-issue-header")),
@@ -52,6 +55,19 @@ class CloudIssueNavigator(
         .cloudErrors()
         .timeout(Duration.ofSeconds(120))
         .build()
+
+    override val filterSubscriptionFalliblePage = FalliblePage.Builder(
+        driver,
+        and(
+            presenceOfElementLocated(By.id("-dialog")),
+            filterSubscriptionList
+        )
+    )
+        .cloudErrors()
+        .timeout(Duration.ofSeconds(30))
+        .build()
+
+    override val viewSubscriptions = CloudViewSubscriptions(jira)
 
     override fun waitForBeingLoaded(): CloudIssueNavigator {
         falliblePage.waitForPageToLoad()

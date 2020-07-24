@@ -30,6 +30,7 @@ class WorkOnSearch(
     private val searchJclProbability: Float,
     private val globalSearchProbability: Float,
     private val customizeColumnsProbability: Float,
+    private val subscribeToFilterProbability: Float,
     private val switchBetweenIssuesProbability: Float
 ) : Action {
     private val logger: Logger = LogManager.getLogger(this::class.java)
@@ -40,6 +41,7 @@ class WorkOnSearch(
         searchJql()
         customizeColumns()
         switchBetweenIssues()
+        subscribeToFilter()
     }
 
     private fun switchBetweenIssues() {
@@ -106,6 +108,36 @@ class WorkOnSearch(
                 }
             ) {
                 jira.goToIssueNavigator(jqlQuery)
+            }
+        }
+    }
+
+    private fun subscribeToFilter() {
+        measure.roll(subscribeToFilterProbability) {
+            val filter = filters.recall()
+            if (null == filter) {
+                logger.debug("I cannot recall filter, skipping...")
+                return@roll
+            }
+            jira.navigateTo(filter.toString())
+            issueNavigator.waitForBeingLoaded()
+            measure.measure(MeasureType.SUBSCRIBE_TO_FILTER) {
+                measure.measure(MeasureType.SUBSCRIBE_TO_FILTER_DETAILS_WDW) {
+                    issueNavigator.clickDetails()
+                }
+                measure.measure(MeasureType.SUBSCRIBE_TO_FILTER_NEW_SUBSCR) {
+                    issueNavigator.clickNewSubscription()
+                }
+                measure.measure(MeasureType.SUBSCRIBE_TO_FILTER_SUBSCR_SUBM) {
+                    issueNavigator.subscribe()
+                }
+            }
+            //JiraTips(jira.driver).closeTips()
+            measure.measure(MeasureType.MANAGE_SUBSCR) {
+                measure.measure(MeasureType.SUBSCRIBE_TO_FILTER_DETAILS_WDW) {
+                    issueNavigator.clickDetails()
+                }
+                issueNavigator.manageSubscriptions()
             }
         }
     }

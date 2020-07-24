@@ -2,6 +2,7 @@ package jces1209.vu.page.issuenavigator
 
 import com.atlassian.performance.tools.jiraactions.api.WebJira
 import jces1209.vu.page.FalliblePage
+import jces1209.vu.page.ViewSubscriptions.dc.DcViewSubscriptions
 import jces1209.vu.page.issuenavigator.bulkoperation.BulkOperationPage
 import jces1209.vu.page.issuenavigator.bulkoperation.DcBulkOperationPage
 import jces1209.vu.wait
@@ -25,7 +26,8 @@ class DcIssueNavigator(
                     presenceOfElementLocated(By.id("issue-content"))
                 ),
                 presenceOfElementLocated(By.id("key-val")),
-                presenceOfElementLocated(By.className("issue-body-content"))
+                presenceOfElementLocated(By.className("issue-body-content")),
+                presenceOfElementLocated(filterDetailsLocator)
             ),
             and(
                 presenceOfElementLocated(By.id("issuetable")),
@@ -36,6 +38,16 @@ class DcIssueNavigator(
         .timeout(Duration.ofSeconds(30))
         .serverErrors()
         .build()
+
+    override val filterSubscriptionFalliblePage = FalliblePage.Builder(
+        driver,
+        filterSubscriptionList
+    )
+        .cloudErrors()
+        .timeout(Duration.ofSeconds(30))
+        .build()
+
+    override val viewSubscriptions = DcViewSubscriptions(jira)
 
     override fun waitForBeingLoaded(): DcIssueNavigator {
         falliblePage.waitForPageToLoad()
@@ -53,6 +65,13 @@ class DcIssueNavigator(
                 visibilityOfElementLocated(By.id("project-avatar"))
             )
         )
+    }
+
+    override fun clickDetails() {
+        driver.wait(
+            invisibilityOfElementLocated(By.id("aui-flag-container"))
+        )
+        super.clickDetails()
     }
 
     override fun openBulkOperation(): BulkOperationPage {

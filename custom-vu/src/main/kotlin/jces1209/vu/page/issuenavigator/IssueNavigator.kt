@@ -1,7 +1,9 @@
 package jces1209.vu.page.issuenavigator
 
 import com.atlassian.performance.tools.jiraactions.api.WebJira
+import jces1209.vu.page.FalliblePage
 import jces1209.vu.page.issuenavigator.bulkoperation.BulkOperationPage
+import jces1209.vu.page.ViewSubscriptions.ViewSubscriptions
 import jces1209.vu.wait
 import org.openqa.selenium.By
 import org.openqa.selenium.support.ui.ExpectedConditions
@@ -15,6 +17,19 @@ abstract class IssueNavigator(
     }
 
     protected val driver = jira.driver
+    protected val filterSubscriptionList = and(
+        presenceOfElementLocated(By.id("filter-subscription")),
+        presenceOfElementLocated(By.id("filter.subscription.prefix.daysOfMonth")),
+        presenceOfElementLocated(By.className("form-body")),
+        presenceOfElementLocated(By.xpath("//*[. = 'Recipients']")),
+        presenceOfElementLocated(By.xpath("//*[. = 'Schedule']")),
+        presenceOfElementLocated(By.xpath("//*[. = 'Interval']")),
+        presenceOfElementLocated(By.id("filter-subscription-submit")),
+        presenceOfElementLocated(By.id("filter-subscription-cancel"))
+    )
+    protected val filterDetailsLocator = By.className("show-filter-details")
+    protected abstract val filterSubscriptionFalliblePage: FalliblePage
+    protected abstract val viewSubscriptions: ViewSubscriptions
 
     private val changeViewButtonLocator = By.id("layout-switcher-button")
 
@@ -59,8 +74,60 @@ abstract class IssueNavigator(
         return this
     }
 
+    fun clickNewSubscription() {
+        driver.wait(
+            elementToBeClickable(By.xpath("//*[@id = 'inline-dialog-filter-details-overlay']//*[contains(text(), 'New subscription')]"))
+        )
+            .click()
+        filterSubscriptionFalliblePage.waitForPageToLoad()
+    }
+
+    open fun clickDetails() {
+        driver.wait(
+            elementToBeClickable(filterDetailsLocator)
+        )
+            .click()
+        waitForDetailsPopup()
+    }
+
     fun openNavigator(): IssueNavigator {
         jira.goToIssueNavigator("resolution = Unresolved ORDER BY priority DESC")
         return this;
+    }
+
+    fun subscribe() {
+        val submitLocator = By.id("filter-subscription-submit")
+        driver.wait(
+            elementToBeClickable(submitLocator)
+        )
+            .click()
+
+        driver.wait(
+            invisibilityOfElementLocated(submitLocator)
+        )
+        waitForBeingLoaded()
+    }
+
+    fun manageSubscriptions(): ViewSubscriptions {
+        driver.wait(
+            elementToBeClickable(By.xpath("//*[@class = 'manage-links']//a[. = 'Manage subscriptions']"))
+        )
+            .click()
+        viewSubscriptions.waitForLoad()
+        return viewSubscriptions
+    }
+
+    protected fun waitForDetailsPopup() {
+        val detailsView = driver.wait(
+            visibilityOfElementLocated(By.id("inline-dialog-filter-details-overlay")))
+        driver.wait(
+            and(
+                visibilityOfNestedElementsLocatedBy(detailsView, By.className("search-owner")),
+                visibilityOfNestedElementsLocatedBy(detailsView, By.className("search-owner-name")),
+                visibilityOfNestedElementsLocatedBy(detailsView, By.className("filter-details-section")),
+                visibilityOfNestedElementsLocatedBy(detailsView, By.className("manage-links")),
+                visibilityOfNestedElementsLocatedBy(detailsView, By.className("edit-permissions"))
+            )
+        )
     }
 }
