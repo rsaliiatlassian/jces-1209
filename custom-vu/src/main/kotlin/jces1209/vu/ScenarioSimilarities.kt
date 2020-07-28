@@ -17,6 +17,7 @@ import jces1209.vu.page.JiraTips
 import jces1209.vu.page.admin.customfields.BrowseCustomFieldsPage
 import jces1209.vu.page.admin.fieldconfigs.BrowseFieldConfigurationsPage
 import jces1209.vu.page.admin.fieldscreen.BrowseFieldScreensPage
+import jces1209.vu.page.admin.manageprojects.ManageProjectsPage
 import jces1209.vu.page.admin.projectroles.BrowseProjectRolesPage
 import jces1209.vu.page.admin.workflow.BrowseWorkflowsPage
 import jces1209.vu.page.bars.side.SideBar
@@ -54,12 +55,17 @@ class ScenarioSimilarities(
         browseProjects: Action,
         issueNavigator: IssueNavigator,
         columnsEditor: ColumnsEditor,
+        manageProjectsPage: ManageProjectsPage,
         topBar: TopBar,
         sideBar: SideBar,
         projectNavigatorPage: ProjectNavigatorPage,
         browseProjectRolesPage: BrowseProjectRolesPage
     ): List<Action> = assembleScenario(
         createIssue = createIssue,
+        manageProjects = ManageProjects(
+            measure = measure,
+            manageProjectsPage = manageProjectsPage
+        ),
         workOnDashboard = WorkOnDashboard(
             jira = jira,
             measure = measure,
@@ -171,6 +177,7 @@ class ScenarioSimilarities(
 
     private fun assembleScenario(
         createIssue: Action,
+        manageProjects: Action,
         workAnIssue: Action,
         projectSummary: Action,
         browseProjects: Action,
@@ -193,6 +200,7 @@ class ScenarioSimilarities(
         val spreadOut = mapOf(
             createIssue to 0, // 5 if we can mutate data
             workAnIssue to 55,
+            manageProjects to 5,
             projectSummary to 5,
             browseProjects to 5,
             browseBoards to 5,
@@ -207,7 +215,7 @@ class ScenarioSimilarities(
             browseFieldScreens to 5,
             browseFieldConfigurations to 5,
             browseCustomFields to 5,
-            projectRoles to 5
+            browseProjectRoles to 5
         )
             .map { (action, proportion) -> Collections.nCopies(proportion, action) }
             .flatten()

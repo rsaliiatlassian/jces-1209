@@ -55,6 +55,9 @@ class MeasureType {
         val ISSUE_LINK_SUBMIT = ActionType("Link Issue(Submit)") { Unit }
 
         @JvmField
+        val MANAGE_PROJECTS = ActionType("Manage Projects") { Unit }
+
+        @JvmField
         val SPRINT_CREATE = ActionType("Sprint (Create)") { Unit }
 
         @JvmField

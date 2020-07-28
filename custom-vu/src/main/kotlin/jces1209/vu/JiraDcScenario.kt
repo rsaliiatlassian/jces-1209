@@ -14,6 +14,7 @@ import jces1209.vu.page.DcIssuePage
 import jces1209.vu.page.admin.projectroles.DcBrowseProjectRolesPage
 import jces1209.vu.page.admin.customfields.DcBrowseCustomFieldsPage
 import jces1209.vu.page.admin.fieldscreen.DcBrowseFieldScreensPage
+import jces1209.vu.page.admin.manageprojects.DcManageProjectsPage
 import jces1209.vu.page.admin.workflow.DcBrowseWorkflowsPage
 import jces1209.vu.page.bars.side.DcSideBar
 import jces1209.vu.page.bars.topBar.dc.DcTopBar
@@ -55,6 +56,7 @@ class JiraDcScenario : Scenario {
             browseCustomFieldsPage = DcBrowseCustomFieldsPage(jira),
             browseBoardsPage = DcBrowseBoardsPage(jira),
             dashboardPage = DcDashboardPage(jira),
+            manageProjectsPage = DcManageProjectsPage(jira),
             projectNavigatorPage = DcProjectNavigatorPage(jira),
             createIssue = CreateAnIssue(
                 jira = jira,

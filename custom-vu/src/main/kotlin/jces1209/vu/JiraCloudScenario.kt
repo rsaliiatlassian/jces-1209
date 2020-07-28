@@ -14,6 +14,7 @@ import jces1209.vu.page.CloudIssuePage
 import jces1209.vu.page.admin.projectroles.CloudBrowseProjectRolesPage
 import jces1209.vu.page.admin.customfields.CloudBrowseCustomFieldsPage
 import jces1209.vu.page.admin.fieldscreen.CloudBrowseFieldScreensPage
+import jces1209.vu.page.admin.manageprojects.CloudManageProjectsPage
 import jces1209.vu.page.admin.workflow.CloudBrowseWorkflowsPage
 import jces1209.vu.page.bars.side.CloudSideBar
 import jces1209.vu.page.bars.topBar.dc.DcTopBar
@@ -58,6 +59,7 @@ class JiraCloudScenario : Scenario {
             browseCustomFieldsPage = CloudBrowseCustomFieldsPage(jira),
             browseBoardsPage = CloudBrowseBoardsPage(jira),
             dashboardPage = CloudDashboardPage(jira),
+            manageProjectsPage = CloudManageProjectsPage(jira),
             projectNavigatorPage = CloudProjectNavigatorPage(jira),
             createIssue = CreateAnIssue(
                 jira = jira,
