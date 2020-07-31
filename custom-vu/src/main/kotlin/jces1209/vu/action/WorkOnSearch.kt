@@ -14,6 +14,7 @@ import jces1209.vu.MeasureType
 import jces1209.vu.MeasureType.Companion.SWITCH_BETWEEN_ISSUES_IN_SEARCH_RESULTS
 import jces1209.vu.page.IssueNavigator
 import jces1209.vu.page.customizecolumns.ColumnsEditor
+import java.lang.Exception
 import java.net.URI
 import javax.json.JsonObject
 
@@ -30,9 +31,13 @@ class WorkOnSearch(
     private val searchJclProbability: Float,
     private val globalSearchProbability: Float,
     private val customizeColumnsProbability: Float,
+    private val switchViewsProbability: Float,
     private val switchBetweenIssuesProbability: Float
 ) : Action {
     override fun run() {
+        if (roll(switchViewsProbability)) {
+            switchViews()
+        }
         if (roll(globalSearchProbability)) {
             openGlobalIssueSearch()
         }
@@ -53,6 +58,69 @@ class WorkOnSearch(
     private fun roll(
         probability: Float
     ): Boolean = (random.random.nextFloat() < probability)
+
+    private fun switchViews() {
+        issueNavigator
+            .openNavigator()
+            .waitForNavigator()
+        meter.measure(
+            key = MeasureType.SWITCH_VIEWS,
+            action = {
+                meter.measure(
+                    key = MeasureType.SWITCH_VIEWS_CHANGE_VIEW_POPUP,
+                    action = {
+                        issueNavigator.changeViewPopup()
+                    }
+                )
+                val viewType = issueNavigator.getViewType()
+                if (viewType == IssueNavigator.ViewType.DETAIL) {
+                    meter.measure(
+                        key = MeasureType.SWITCH_VIEWS_CHANGE_VIEW_TYPE,
+                        action = {
+                            issueNavigator.changeViewType(IssueNavigator.ViewType.LIST)
+                            issueNavigator.waitForNavigator()
+                        }
+                    )
+                    meter.measure(
+                        key = MeasureType.SWITCH_VIEWS_CHANGE_VIEW_POPUP,
+                        action = {
+                            issueNavigator.changeViewPopup()
+                        }
+                    )
+                    meter.measure(
+                        key = MeasureType.SWITCH_VIEWS_CHANGE_VIEW_TYPE,
+                        action = {
+                            issueNavigator.changeViewType(IssueNavigator.ViewType.DETAIL)
+                            issueNavigator.waitForNavigator()
+                        }
+                    )
+                } else if (viewType == IssueNavigator.ViewType.LIST) {
+                    meter.measure(
+                        key = MeasureType.SWITCH_VIEWS_CHANGE_VIEW_TYPE,
+                        action = {
+                            issueNavigator.changeViewType(IssueNavigator.ViewType.DETAIL)
+                            issueNavigator.waitForNavigator()
+                        }
+                    )
+                    meter.measure(
+                        key = MeasureType.SWITCH_VIEWS_CHANGE_VIEW_POPUP,
+                        action = {
+                            issueNavigator.changeViewPopup()
+                        }
+                    )
+                    meter.measure(
+                        key = MeasureType.SWITCH_VIEWS_CHANGE_VIEW_TYPE,
+                        action = {
+                            issueNavigator.changeViewType(IssueNavigator.ViewType.LIST)
+                            issueNavigator.waitForNavigator()
+                        }
+                    )
+                } else {
+                    Exception("Unrecognixed view type")
+                }
+            }
+        )
+    }
 
     private fun switchBetweenIssues() {
         issueNavigator

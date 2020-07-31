@@ -31,6 +31,11 @@ class CloudIssueNavigator(
                     presenceOfElementLocated(By.className("issue-body-content"))
                 )
             ),
+            //List View
+            and(
+                presenceOfElementLocated(By.id("issuetable")),
+                presenceOfElementLocated(By.id("layout-switcher-toggle"))
+            ),
             presenceOfElementLocated(By.className("no-results-hint")) // TODO is it too optimistic like in SearchServerFilter.waitForIssueNavigator ?
         )
     )
@@ -55,6 +60,52 @@ class CloudIssueNavigator(
             )
         )
     }
+
+    override fun changeViewPopup(){
+        driver.wait(
+            ExpectedConditions.elementToBeClickable(By.id("layout-switcher-button"))
+        )
+            .click()
+        driver.wait(
+            ExpectedConditions.and(
+                ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id = 'layout-switcher-button_drop']//*[. = 'Views']")),
+                ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id = 'layout-switcher-button_drop']//*[. = 'Detail View']")),
+                ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id = 'layout-switcher-button_drop']//*[. = 'List View']"))
+            )
+        )
+    }
+
+    override fun getViewType(): ViewType {
+        val listItems =
+            driver.wait(
+                ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//*[@id = 'layout-switcher-button_drop']//li//span"))
+            )
+
+        if (listItems[0].getAttribute("class").contains("aui-iconfont-success")) {
+            return IssueNavigator.ViewType.DETAIL
+        } else if (listItems[1].getAttribute("class").contains("aui-iconfont-success")) {
+            return IssueNavigator.ViewType.LIST
+        } else {
+            throw Exception("Unrecognized attribute")
+        }
+    }
+
+    override fun changeViewType(viewType: ViewType) {
+        if (viewType == IssueNavigator.ViewType.DETAIL) {
+            driver.wait(
+                ExpectedConditions.elementToBeClickable(By.xpath("//*[@id = 'layout-switcher-button_drop']//*[. = 'Detail View']"))
+            )
+                .click()
+        } else if (viewType == IssueNavigator.ViewType.LIST) {
+            driver.wait(
+                ExpectedConditions.elementToBeClickable(By.xpath("//*[@id = 'layout-switcher-button_drop']//*[. = 'List View']"))
+            )
+                .click()
+        } else {
+            throw Exception("Unrecognized view type")
+        }
+    }
+
 
     private fun getIssueElementFromList(): WebElement {
         val elements = driver.wait(

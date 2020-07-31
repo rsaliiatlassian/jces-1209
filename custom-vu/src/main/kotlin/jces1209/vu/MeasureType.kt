@@ -96,6 +96,15 @@ class MeasureType {
         var OPEN_GLOBAL_SEARCH = ActionType("Quick search top bar") { Unit }
 
         @JvmField
+        var SWITCH_VIEWS = ActionType("Switch views") { Unit }
+
+        @JvmField
+        var SWITCH_VIEWS_CHANGE_VIEW_POPUP = ActionType("Switch views (Change View popup)") { Unit }
+
+        @JvmField
+        var SWITCH_VIEWS_CHANGE_VIEW_TYPE = ActionType("Switch views (Change View Type)") { Unit }
+
+        @JvmField
         var VIEW_DASHBOARDS = ActionType("View Dasboards List") { Unit }
 
         @JvmField

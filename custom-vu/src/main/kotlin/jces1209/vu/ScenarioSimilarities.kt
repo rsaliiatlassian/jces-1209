@@ -128,6 +128,7 @@ class ScenarioSimilarities(
             searchJclProbability = 0.05f,
             globalSearchProbability = 0.50f,
             customizeColumnsProbability = 0.05f,
+            switchViewsProbability = 0.15f,
             switchBetweenIssuesProbability = 0.15f
         ),
         workOnTransition = WorkOnTransition(
