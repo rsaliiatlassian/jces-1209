@@ -14,8 +14,8 @@ import jces1209.vu.memory.SeededMemory
 import jces1209.vu.page.AbstractIssuePage
 import jces1209.vu.page.IssueNavigator
 import jces1209.vu.page.JiraTips
+import jces1209.vu.page.admin.ProjectRoles.ProjectRolesPage
 import jces1209.vu.page.admin.workflow.BrowseWorkflowsPage
-import jces1209.vu.page.admin.workflow.DcBrowseWorkflowsPage
 import jces1209.vu.page.bars.side.SideBar
 import jces1209.vu.page.bars.topBar.TopBar
 import jces1209.vu.page.boards.browse.BrowseBoardsPage
@@ -49,6 +49,7 @@ class ScenarioSimilarities(
         issueNavigator: IssueNavigator,
         columnsEditor: ColumnsEditor,
         topBar: TopBar,
+        projectRolesPage: ProjectRolesPage,
         sideBar: SideBar
     ): List<Action> = assembleScenario(
         createIssue = createIssue,
@@ -138,6 +139,10 @@ class ScenarioSimilarities(
             sideBar = sideBar,
             issueNavigator = issueNavigator
         ),
+        projectRoles = ProjectRoles(
+            meter = meter,
+            projectRolesPage = projectRolesPage
+        ),
         browseWorkflows = BrowseWorkflows(
             meter = meter,
             browseWorkflowsPage = browseWorkflowsPage
@@ -158,23 +163,25 @@ class ScenarioSimilarities(
         workOnSearch: Action,
         workOnTopBar: Action,
         workOnTransition: Action,
+        projectRoles: Action,
         browseWorkflows: Action
     ): List<Action> {
         val exploreData = listOf(browseProjects, browseFilters, browseBoards)
         val spreadOut = mapOf(
             createIssue to 0, // 5 if we can mutate data
-            workAnIssue to 55,
-            projectSummary to 5,
-            browseProjects to 5,
-            browseBoards to 5,
-            viewBoard to 30,
-            workOnDashboard to 5,
+            workAnIssue to 0,
+            projectSummary to 0,
+            browseProjects to 0,
+            browseBoards to 0,
+            viewBoard to 0,
+            workOnDashboard to 0,
             workOnSprint to 0, // 3 if we can mutate data
-            browseProjectIssues to 5,
-            workOnSearch to 5,
-            workOnTopBar to 5,
-            workOnTransition to 5,
-            browseWorkflows to 5
+            browseProjectIssues to 0,
+            workOnSearch to 0,
+            workOnTopBar to 0,
+            workOnTransition to 0,
+            projectRoles to 5,
+            browseWorkflows to 0
         )
             .map { (action, proportion) -> Collections.nCopies(proportion, action) }
             .flatten()

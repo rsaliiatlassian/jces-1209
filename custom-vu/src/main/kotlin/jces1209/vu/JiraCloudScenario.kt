@@ -9,6 +9,7 @@ import com.atlassian.performance.tools.jiraactions.api.scenario.Scenario
 import jces1209.vu.action.*
 import jces1209.vu.page.CloudIssueNavigator
 import jces1209.vu.page.CloudIssuePage
+import jces1209.vu.page.admin.ProjectRoles.CloudProjectRolesPage
 import jces1209.vu.page.admin.workflow.CloudBrowseWorkflowsPage
 import jces1209.vu.page.bars.side.CloudSideBar
 import jces1209.vu.page.bars.topBar.dc.DcTopBar
@@ -71,6 +72,7 @@ class JiraCloudScenario : Scenario {
             issueNavigator = CloudIssueNavigator(jira),
             columnsEditor = CloudColumnsEditor(jira.driver),
             topBar = DcTopBar(jira.driver),
+            projectRolesPage = CloudProjectRolesPage(jira),
             sideBar = CloudSideBar(jira)
         )
     }

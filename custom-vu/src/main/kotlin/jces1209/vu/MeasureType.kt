@@ -99,6 +99,9 @@ class MeasureType {
         var OPEN_GLOBAL_SEARCH = ActionType("Quick search top bar") { Unit }
 
         @JvmField
+        var PROJECT_ROLES = ActionType("Project Roles") { Unit }
+
+        @JvmField
         var VIEW_DASHBOARDS = ActionType("View Dasboards List") { Unit }
 
         @JvmField
