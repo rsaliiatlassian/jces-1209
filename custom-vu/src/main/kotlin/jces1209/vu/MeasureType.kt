@@ -16,6 +16,9 @@ class MeasureType {
         val BROWSE_FIELD_CONFIGURATIONS = ActionType("Browse Field Configurations") { Unit }
 
         @JvmField
+        var BROWSE_ISSUE_TYPES = ActionType("Browse Issue Types") { Unit }
+
+        @JvmField
         var BROWSE_PROJECT_ROLES = ActionType("Browse Project Roles") { Unit }
 
         @JvmField

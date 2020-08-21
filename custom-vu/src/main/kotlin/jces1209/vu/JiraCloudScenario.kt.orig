@@ -14,7 +14,10 @@ import jces1209.vu.page.CloudIssuePage
 import jces1209.vu.page.admin.projectroles.CloudBrowseProjectRolesPage
 import jces1209.vu.page.admin.customfields.CloudBrowseCustomFieldsPage
 import jces1209.vu.page.admin.fieldscreen.CloudBrowseFieldScreensPage
+<<<<<<< HEAD
+=======
 import jces1209.vu.page.admin.issuetypes.CloudBrowseIssueTypesPage
+>>>>>>> eaa918f... JCSP-399: DC, Cloud: View projects (#79)
 import jces1209.vu.page.admin.manageprojects.CloudManageProjectsPage
 import jces1209.vu.page.admin.workflow.CloudBrowseWorkflowsPage
 import jces1209.vu.page.bars.side.CloudSideBar
